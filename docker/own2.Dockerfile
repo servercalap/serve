@@ -15,7 +15,7 @@ RUN --mount=type=cache,id=apt-dev,target=/var/cache/apt \
     git \
     htop \
     vim \
-    apt clean && \
+    apt clean  \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'alias python=python3' >> ~/.bashrc
@@ -81,7 +81,7 @@ RUN --mount=type=cache,id=apt-dev,target=/var/cache/apt \
     vim \
     && rm -rf /var/lib/apt/lists/*
 
-COPY  --chown=user:user --from=builderbase /venv /venv
+COPY  --chown=model-server --from=builderbase /venv /venv
 ENV PATH="/venv/bin:$PATH"
 COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh \
