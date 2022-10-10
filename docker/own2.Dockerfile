@@ -15,7 +15,6 @@ RUN --mount=type=cache,id=apt-dev,target=/var/cache/apt \
     git \
     htop \
     vim \
-    apt clean  \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'alias python=python3' >> ~/.bashrc
