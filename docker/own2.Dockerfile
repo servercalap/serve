@@ -25,16 +25,21 @@ RUN echo 'alias pip=pip3' >> ~/.bashrc
 
 FROM ubuntubase AS builderbase
 
-RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    bash Miniconda3-latest-Linux-x86_64.sh -b -p /home/$USERNAME/miniconda3 && \
-    rm Miniconda3-latest-Linux-x86_64.sh
+ENV CONDA_ENV_NAME = serve
+ENV PATH /opt/conda/bin:$PATH 
 
-ENV PATH=/home/$USERNAME/miniconda3/bin:${PATH}
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.3-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda clean -tipsy && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate $CONDA_ENV_NAME" >> ~/.bashrc
+
 RUN conda update -y conda && \
 # Create serve environment
-    conda create --name serve python=3.8 && \
-    conda init bash && \
-    echo "conda activate serve" >> /home/$USERNAME/.bashrc
+    conda create --name serve python=3.8 
+    # echo "conda activate serve" >> /home/$USERNAME/.bashrc
 SHELL ["conda", "run", "-n", "serve", "/bin/bash", "-c"]
 
 # CUDA and Torch setup
