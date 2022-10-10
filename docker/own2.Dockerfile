@@ -50,6 +50,7 @@ ARG TORCH_VISION_VER="0.13.1"
 
 # install torch related
 RUN python -m pip install -U pip setuptools && \
+    conda install -c conda-forge conda-pack && \
     conda install pytorch torchvision cudatoolkit=11.3 -c pytorch && \
     conda install -c conda-forge captum && \
     conda install -c pytorch torchserve torch-model-archiver torch-workflow-archiver && \
